@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📱 스마트 폰락 & 집중 관리 시스템 | 미래형 교실 시뮬레이터</title>
+  <meta name="description" content="수업 시간 학생들의 스마트폰 사용을 효율적으로 차단하고 집중력을 극대화하는 스마트 폰락 및 집중도 제어 시뮬레이터 대시보드입니다.">
+  
+  <!-- Google Fonts (Outfit & Noto Sans KR) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Backdrops -->
+  <div class="background-decorations">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="pulse-icon">📱</span>
+        <h1 class="logo-title">SMART PHONE LOCK</h1>
+        <span class="version-tag">PRO v2.5</span>
+      </div>
+      <p class="logo-subtitle">미래교실 스마트폰 일괄 통제 및 실시간 집중도 관리 대시보드</p>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      
+      <!-- 1. Left Column: Teacher Console & Focus Analytics -->
+      <section class="panel-left">
+        <!-- Session Lock Controller -->
+        <div class="glass-card control-card">
+          <div class="card-header">
+            <h2 class="section-title"><span class="icon">🔒</span> 교사용 스마트 제어</h2>
+            <span class="live-indicator">LIVE CONSOLE</span>
+          </div>
+          
+          <!-- Timer Setup & Actions -->
+          <div class="timer-setup-box">
+            <label class="input-label">집중 수업 시간 설정</label>
+            <div class="preset-buttons">
+              <button class="btn-preset active" data-time="50">50분 (1교시)</button>
+              <button class="btn-preset" data-time="10">10분 (테스트)</button>
+              <button class="btn-preset" data-time="1">1분 (퀵)</button>
+            </div>
+            <div class="custom-timer-display" id="class-timer-display">50:00</div>
+          </div>
+
+          <div class="console-actions">
+            <button id="btn-lock-class" class="btn btn-danger btn-lock">
+              <span class="btn-glow"></span>
+              <span class="btn-text">🔒 일괄 수업 잠금 시작</span>
+            </button>
+            <div class="sub-actions-row">
+              <button id="btn-unlock-class" class="btn btn-secondary" disabled>
+                <span>🔓 잠금 일시 해제</span>
+              </button>
+              <button id="btn-mute-siren" class="btn btn-warning btn-siren-mute hidden">
+                <span class="pulse-red">🚨</span> 사이렌 해제
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-Time Focus Metrics -->
+        <div class="glass-card analytics-card">
+          <h2 class="section-title"><span class="icon">📊</span> 실시간 집중 분석</h2>
+          <div class="metrics-grid">
+            <!-- Focus Rate Progress -->
+            <div class="metric-item full-width">
+              <div class="metric-header">
+                <span class="metric-label">학급 실시간 집중율</span>
+                <span class="metric-value" id="focus-rate-text">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="focus-rate-bar" style="width: 0%"></div>
+              </div>
+            </div>
+            
+            <!-- Quick Counters -->
+            <div class="metric-item">
+              <span class="metric-label">보관함 제출</span>
+              <span class="metric-number text-success" id="counter-submitted">0 / 30</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">몰래 사용 적발</span>
+              <span class="metric-number text-danger" id="counter-cheating">0회</span>
+            </div>
+          </div>
+          
+          <!-- Leaderboard -->
+          <div class="leaderboard-section">
+            <h3 class="sub-section-title">🏆 집중 우수 학생 (포인트 순위)</h3>
+            <ol class="leaderboard-list" id="focus-leaderboard">
+              <li class="empty-leaderboard">수업이 시작되면 순위가 산정됩니다.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Live Classroom Alerts Log -->
+        <div class="glass-card log-card">
+          <div class="card-header">
+            <h2 class="section-title"><span class="icon">📢</span> 집중 모니터링 로그</h2>
+            <button id="btn-clear-logs" class="btn btn-text-only">비우기</button>
+          </div>
+          <div class="log-list-wrapper">
+            <ul class="log-list" id="classroom-logs">
+              <li class="empty-log">실시간 감지 로그가 여기에 표시됩니다.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Center Column: Virtual Phone Rack (스마트폰 보관함) -->
+      <section class="panel-center">
+        <div class="glass-card rack-card">
+          <div class="card-header">
+            <div class="title-with-desc">
+              <h2 class="section-title"><span class="icon">📥</span> 스마트 스마트폰 보관함</h2>
+              <p class="section-desc">보관함을 클릭하면 우측 폰 시뮬레이터에서 해당 학생이 선택됩니다.</p>
+            </div>
+            <span class="active-student-badge" id="selected-student-indicator">선택: 1번 학생</span>
+          </div>
+
+          <div class="rack-grid-wrapper">
+            <div class="rack-grid" id="phone-rack-grid">
+              <!-- JS will dynamically render 30 student smartphone slots here -->
+            </div>
+          </div>
+
+          <!-- Locker Status Legend -->
+          <div class="rack-legend">
+            <span class="legend-item"><span class="dot submitted"></span>제출 완료</span>
+            <span class="legend-item"><span class="dot holding"></span>소지 중 (미제출)</span>
+            <span class="legend-item"><span class="dot cheating wailing"></span>몰래 사용 중!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Right Column: Interactive Phone Simulator -->
+      <section class="panel-right">
+        <div class="glass-card simulator-header-card">
+          <h2 class="section-title"><span class="icon">📱</span> 1:1 학생 스마트폰 시뮬레이터</h2>
+          <div class="student-select-row">
+            <label for="active-student-select">학생 선택:</label>
+            <select id="active-student-select" class="premium-select">
+              <!-- Options 1 to 30 will be generated -->
+            </select>
+          </div>
+        </div>
+
+        <!-- 3D Smartphone Device Mockup -->
+        <div class="phone-mockup-wrapper">
+          <div class="phone-device" id="phone-hardware-device">
+            <!-- Hardware Details -->
+            <div class="phone-notch">
+              <div class="phone-camera"></div>
+              <div class="phone-speaker"></div>
+            </div>
+            
+            <div class="phone-side-button btn-power" id="btn-phone-power" title="화면 켜기/끄기 (전원)"></div>
+            <div class="phone-side-button btn-volume-up" title="볼륨 업"></div>
+            <div class="phone-side-button btn-volume-down" title="볼륨 다운"></div>
+
+            <!-- Virtual Screen Area -->
+            <div class="phone-screen" id="phone-screen-area">
+              
+              <!-- Screen State 1: Dark / Screen OFF -->
+              <div class="screen-state state-off active" id="screen-state-off">
+                <div class="reflective-glare"></div>
+                <div class="wake-hint">전원 버튼을 눌러 화면을 켜세요</div>
+              </div>
+
+              <!-- Screen State 2: Home Screen (Unlocked & Phone in Hand) -->
+              <div class="screen-state state-home" id="screen-state-home">
+                <!-- Status bar -->
+                <div class="phone-status-bar">
+                  <span class="phone-time" id="phone-status-time">19:04</span>
+                  <div class="phone-status-icons">
+                    <span class="icon-wifi">📶</span>
+                    <span class="icon-battery" id="phone-status-battery">85%</span>
+                  </div>
+                </div>
+
+                <!-- Wallpaper apps & grid -->
+                <div class="home-content">
+                  <div class="app-widgets">
+                    <div class="widget clock-widget">
+                      <div class="widget-time" id="widget-clock-time">19:04</div>
+                      <div class="widget-date">5월 18일 월요일</div>
+                    </div>
+                  </div>
+
+                  <div class="app-icons-grid">
+                    <div class="app-item clickable-app" data-app="인스타그램">
+                      <div class="app-icon insta">📸</div>
+                      <span class="app-name">Instagram</span>
+                    </div>
+                    <div class="app-item clickable-app" data-app="틱톡">
+                      <div class="app-icon tiktok">🎵</div>
+                      <span class="app-name">TikTok</span>
+                    </div>
+                    <div class="app-item clickable-app" data-app="유튜브">
+                      <div class="app-icon youtube">📺</div>
+                      <span class="app-name">YouTube</span>
+                    </div>
+                    <div class="app-item clickable-app" data-app="모바일 배틀그라운드">
+                      <div class="app-icon game">🎮</div>
+                      <span class="app-name">Game</span>
+                    </div>
+                  </div>
+
+                  <!-- Quick Action Panel inside Simulator -->
+                  <div class="student-actions-overlay">
+                    <button id="btn-submit-phone" class="btn-simulator-action submit">
+                      📥 보관함에 폰 제출하기
+                    </button>
+                    <p class="action-caption">제출 시 폰이 잠기며 집중 포인트가 지급됩니다.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Screen State 3: Locked Mode (Submitted or Forced Lock) -->
+              <div class="screen-state state-locked" id="screen-state-locked">
+                <div class="locked-glow-bg"></div>
+                <!-- Status bar -->
+                <div class="phone-status-bar">
+                  <span class="phone-time">LOCK</span>
+                  <div class="phone-status-icons">
+                    <span>🔒 SECURE</span>
+                  </div>
+                </div>
+
+                <div class="locked-body">
+                  <div class="lock-shield">🔒</div>
+                  <h3 class="lock-title">집중 모드 활성화됨</h3>
+                  <p class="lock-subtitle">수업에 집중하는 중입니다.</p>
+
+                  <!-- Dynamic Quote -->
+                  <div class="quote-container">
+                    <p class="quote-text" id="lock-quote">"오늘 걷지 않으면 내일은 뛰어야 한다."</p>
+                  </div>
+
+                  <!-- Focus points earnt -->
+                  <div class="focus-points-tracker">
+                    <span class="points-label">획득한 집중 포인트</span>
+                    <span class="points-value" id="simulated-points-display">0 pt</span>
+                  </div>
+
+                  <button id="btn-retrieve-phone" class="btn-simulator-action retrieve">
+                    🔓 보관함에서 폰 회수하기
+                  </button>
+                </div>
+              </div>
+
+              <!-- Screen State 4: Cheating Warning (Secret Peek caught) -->
+              <div class="screen-state state-cheating" id="screen-state-cheating">
+                <div class="cheating-pulse-overlay"></div>
+                <div class="cheating-body">
+                  <div class="warning-icon">🚨</div>
+                  <h2 class="warning-title">사용 감지됨!</h2>
+                  <p class="warning-subtitle">집중 잠금 상태에서 스마트폰 조작이 감지되었습니다. 교사 콘솔에 경고 알림이 전송되었습니다.</p>
+                  
+                  <div class="warning-details">
+                    <div>적발 대상: <strong id="cheating-student-num">01번 학생</strong></div>
+                    <div>알람 주파수: <strong>오디오 사이렌 작동 중</strong></div>
+                  </div>
+
+                  <button id="btn-close-warning" class="btn-simulator-action close-warn">
+                    죄송합니다 (폰 끄기)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Push Notification Overlay -->
+              <div class="phone-toast-notification" id="phone-toast">
+                <div class="toast-header">
+                  <span class="toast-app-icon">👩‍🏫</span>
+                  <span class="toast-app-title">선생님의 메시지</span>
+                  <span class="toast-time">지금</span>
+                </div>
+                <div class="toast-body" id="phone-toast-text">
+                  칠판을 집중해서 바라보세요!
+                </div>
+              </div>
+
+            </div> <!-- End Screen -->
+            
+            <div class="phone-home-indicator"></div>
+          </div> <!-- End Device -->
+        </div> <!-- End Mockup Wrapper -->
+
+        <!-- Simulator Helper Panel -->
+        <div class="glass-card helper-card">
+          <h3 class="sub-section-title">🧪 디버그 및 시뮬레이션 제어</h3>
+          <div class="helper-buttons">
+            <button id="btn-sim-peek" class="btn btn-warning-outline">
+              👀 수업 중 몰래 폰 켜기 테스트
+            </button>
+            <p class="helper-desc">수업 잠금 상태에서 스마트폰을 몰래 켰을 때 발생하는 경보와 모니터링 연동을 강제 시뮬레이션합니다.</p>
+          </div>
+          
+          <!-- Instant Teacher Alert Sender -->
+          <div class="teacher-message-sender">
+            <label for="teacher-msg-input" class="input-label">학생에게 개별 메시지 전송</label>
+            <div class="input-send-group">
+              <input type="text" id="teacher-msg-input" placeholder="예: 칠판 주목하세요!, 졸지 마세요!" value="수업에 집중하세요! 칠판을 보세요.">
+              <button id="btn-send-toast" class="btn btn-primary">전송</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>© 2026 스마트 클래스 집중 관리 시스템. Built for fair & distraction-free learning environments.</p>
+    </footer>
+  </div>
+
+  <!-- Custom JS -->
+  <script src="app.js"></script>
+</body>
+</html>
